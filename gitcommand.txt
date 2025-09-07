@@ -1,0 +1,76 @@
+Step 1: Check if you already have a key
+
+Open Git Bash or PowerShell and run:
+
+dir ~/.ssh
+
+
+or in Git Bash:
+
+ls -al ~/.ssh
+
+
+If you see files like id_ed25519 and id_ed25519.pub (or id_rsa / id_rsa.pub), then you already have a key.
+
+The .pub file is the public key you need to copy to GitHub.
+
+View it with:
+
+cat ~/.ssh/id_ed25519.pub
+
+Step 2: Generate a new key (if no .pub file exists)
+
+Run in Git Bash:
+
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+
+Press Enter for the file location (/c/Users/YourName/.ssh/id_ed25519).
+
+Press Enter again if you don’t want a passphrase.
+
+This will create two files:
+
+id_ed25519 → your private key (keep safe, never share).
+
+id_ed25519.pub → your public key (this is what you copy to GitHub).
+
+🔑 Step 3: Add the public key to GitHub
+
+Show the public key:
+
+cat ~/.ssh/id_ed25519.pub
+
+
+You’ll see something like:
+
+ssh-ed25519 AAAAC3Nz...longstring... your_email@example.com
+
+
+Copy that whole line → go to GitHub →
+Settings → SSH and GPG keys → New SSH key → paste it → save.
+
+🔑 Step 4: Start SSH agent and add key
+
+Run:
+
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/id_ed25519
+
+🔑 Step 5: Test connection
+ssh -T git@github.com
+
+
+If successful, you’ll see:
+
+Hi hbadshahp! You've successfully authenticated, but GitHub does not provide shell access.
+
+
+👉 After this, just update your repo remote to SSH once:
+
+git remote set-url origin git@github.com:hbadshahp/100-days-python.git
+
+
+And push:
+
+git push origin main
